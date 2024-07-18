@@ -6,6 +6,7 @@ db = SQLAlchemy()
 class Question(db.Model):
     __tablename__ = 'questions'
     id = db.Column(db.BigInteger, primary_key=True)
+    question_type = db.Column(db.Text,)
     question_text = db.Column(db.Text)
     questionarie_id = db.Column(db.BigInteger, db.ForeignKey('questionares.id'))
     questionare = db.relationship('Questionares' , back_populates='questions')

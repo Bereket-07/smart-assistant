@@ -25,7 +25,8 @@ def get_by_questioner_id(questoner_id):
             'question_text': question.question_text,
             'rest': {
                 'choices': [],
-                'answers': []
+                'list of answers for the quwstions by id from choice list': [],
+                'list of answers for the open question':[]
             }
         }
         
@@ -33,17 +34,24 @@ def get_by_questioner_id(questoner_id):
         choices = question.choices
         # choices = db.session.query(Choices).filter(Choices.question_id == question.id).all()
         for choice in choices:
-            question_data['rest']['choices'].append(choice.choice_text)
+            question_data['rest']['choices'].append({
+                "id" : choice.id, 
+                "text": choice.choice_text
+            })
 
         # Fetch answers for the question
         answers = question.answers
+        
         # answers = db.session.query(Answers).filter(Answers.question_id == question.id).all()
-        for answer in answers:
-            question_data['rest']['answers'].append({
-                'email': answer.user.email,
-                'name': answer.user.name,
-                'answer': answer.answer
-            })
+        if question.question_type == "Choice":
+            for answer in answers:
+                for choice in choices:
+                    if answer.answer == choice.choice_text:
+                        question_data['rest']['list of answers for the quwstions by id from choice list'].append(choice.id)
+                        break
+        else:
+            for answer in answers:
+                question_data['rest']['list of answers for the open question'].append(answer.answer)        
         
         # Append the question data to the questionnaire data
         response_data['questionnaire']['zdata']['questions'].append(question_data)
