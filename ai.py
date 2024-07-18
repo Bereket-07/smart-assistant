@@ -21,7 +21,7 @@ def fetch_data_from_route(questioner_id):
     return data
 
 # Function to split large data into chunks
-def split_data(data, max_chunk_size=25000):
+def split_data(data, max_chunk_size=2500):
     if isinstance(data, dict):
         data_str = str(data)
     elif isinstance(data, list):
@@ -66,7 +66,7 @@ def chat_with_groq(user_message, questioner_id, language):
     with_message_history = RunnableWithMessageHistory(chain, get_session_history, input_messages_key="messages")
 
     response_content = ""
-    MAX_RETRIES = 5
+    MAX_RETRIES = 20
     BACKOFF_FACTOR = 2
 
     for chunk in data_chunks:
