@@ -47,35 +47,4 @@ def get_by_questioner_id(questoner_id):
         
         # Append the question data to the questionnaire data
         response_data['questionnaire']['zdata']['questions'].append(question_data)
-        data =  response_data
-        processed_data={
-        "description":"",
-        "title":"",
-        "topic":"",
-        "total_audience":0,
-        "questions_and_answers":[]
-        }
-        questioner=data.get("questionnaire",{})
-        processed_data["description"]=questioner.get("description","")
-        processed_data["title"]=questioner.get("title","")
-        processed_data["topic"]=questioner.get("topic","")
-        processed_data["total_audience"]=questioner.get("total_audience",0)
-        questions = questioner.get("zdata",{}).get("questions",[])
-
-        for question in questions:
-            question_text = question.get("question_text","")
-            answers = question.get("rest",{}).get("answers",[])
-            choices = question.get("rest",{}).get("choices",[])
-
-            for answer in answers:
-                answer_text = answer.get("answer","")
-                email=answer.get("email","")
-                name=answer.get("name","")
-                processed_data["questions_and_answers"].append({
-                "question": question_text,
-                "answer": answer_text,
-                "email": email,
-                "name": name,
-                "choices": choices
-                })
-    return processed_data
+    return response_data
