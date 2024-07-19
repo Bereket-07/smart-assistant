@@ -21,7 +21,7 @@ def fetch_data_from_route(questioner_id):
     return data
 
 # Function to split large data into chunks
-def split_data(data, max_chunk_size=2500):
+def split_data(data, max_chunk_size=20000):
     if isinstance(data, dict):
         data_str = str(data)
     elif isinstance(data, list):
