@@ -35,7 +35,6 @@ def split_data(data, max_chunk_size=20000):
 # Function to process the fetched data
 def chat_with_groq(user_message, questioner_id, language):
     processed_data = fetch_data_from_route(questioner_id)
-    return processed_data
     data_chunks = split_data(processed_data)
 
     data_template = '''
