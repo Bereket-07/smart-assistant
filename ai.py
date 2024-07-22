@@ -66,7 +66,7 @@ def chat_with_groq(user_message, questioner_id, language):
     with_message_history = RunnableWithMessageHistory(chain, get_session_history, input_messages_key="messages")
 
     response_content = ""
-    MAX_RETRIES = 50
+    MAX_RETRIES = 150
     BACKOFF_FACTOR = 2
 
     for chunk in data_chunks:
@@ -95,5 +95,3 @@ def chat_with_groq(user_message, questioner_id, language):
                     raise err
 
     return response_content.replace('*', '').replace('\n\n', '\n').replace('\n', ' ').strip()  # Remove asterisks and extra whitespace
-
-
