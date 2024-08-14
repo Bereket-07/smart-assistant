@@ -8,8 +8,7 @@ from langchain_core.chat_history import BaseChatMessageHistory, InMemoryChatMess
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_core.messages import HumanMessage
-from langchain.output_parsers import StructuredOutputParser,ResponseSchema
-
+from langchain_core.output_parsers import StrOutputParser
 
 
 
@@ -42,18 +41,18 @@ def chat_with_groq(user_message, questioner_id, language):
     processed_data = fetch_data_from_route(questioner_id)
     data_chunks = split_data(processed_data)
 
-    response_schemas = [
-        ResponseSchema(name ="answer" , description="give answer for the asked question"),
-        ResponseSchema(name ="reason" , description="reason about the anwer you gave"),
-    ]  
-    output_parser = StructuredOutputParser.from_response_schemas(response_schemas)
-    format_instructions = output_parser.get_format_instructions()
+    # response_schemas = [
+    #     ResponseSchema(name ="answer" , description="give answer for the asked question"),
+    #     ResponseSchema(name ="reason" , description="reason about the anwer you gave"),
+    # ]  
+    output_parser = StrOutputParser()
+    # format_instructions = output_parser.get_format_instructions()
 
     data_template = '''
         You are a helpful assistant. Here is the collected data:
-        
         data: {data}
-        Answer all questions based on this data \n{format_instructions} to the best of your ability in {language}.
+        you are very friendly and ask if anything is not clear
+        Answer all questions based on this data  to the best of your ability in {language}.
     '''
     prompt_description = "This is a chat interaction with an AI assistant using Groq."
     prom = ChatPromptTemplate.from_messages(
@@ -67,7 +66,7 @@ def chat_with_groq(user_message, questioner_id, language):
     )
     store = {}
     model = ChatGroq(model="llama3-8b-8192")
-    chain = prom | model
+    chain = prom | model | output_parser
 
     def get_session_history(session_id: str) -> BaseChatMessageHistory:
         if session_id not in store:
